@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Prabhkirat Singh Portfolio</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Prabhkirat Singh — MSc Computer Science student and junior Data Analyst in West Yorkshire, UK.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,400..900&family=Public+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a working analyst's sheet — left-aligned column, hero pairs the intro with a live "dirty → clean" data table; everything below is quiet rows and rules */
+:root{
+  --bg:#F4F5F2;
+  --surface:#FFFFFF;
+  --ink:#16201C;
+  --ink-soft:#56635D;
+  --line:#D6DBD5;
+  --accent:#2E7A57;      /* ledger green */
+  --accent-ink:#FFFFFF;
+  --tint:#E4F0E9;
+  --bad:#B8462E;         /* semantic: data error */
+  --bad-tint:#F7E3DD;
+  --s1:#1E8C5A;          /* chart series 1 (validated) */
+  --s2:#8455B8;          /* chart series 2 (validated) */
+  --band:#EEF1EC;
+  --font-display:"Archivo", "Arial Narrow", Arial, sans-serif;
+  --font-body:"Public Sans", "Segoe UI", Roboto, Arial, sans-serif;
+  --font-data:"JetBrains Mono", ui-monospace, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#111714; --surface:#18201C; --ink:#E5ECE8; --ink-soft:#9DAEA5; --line:#2A3630;
+    --accent:#5CC092; --accent-ink:#0E1612; --tint:#1C3027; --bad:#F08A70; --bad-tint:#3A221C; --s1:#2FA36F; --s2:#A07BDA; --band:#1D2621; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#111714; --surface:#18201C; --ink:#E5ECE8; --ink-soft:#9DAEA5; --line:#2A3630;
+  --accent:#5CC092; --accent-ink:#0E1612; --tint:#1C3027; --bad:#F08A70; --bad-tint:#3A221C; --s1:#2FA36F; --s2:#A07BDA; --band:#1D2621; color-scheme:dark;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{margin:0; background:var(--bg); color:var(--ink); font-family:var(--font-body); font-size:17px; line-height:1.6}
+.wrap{max-width:1100px; margin:0 auto; padding-left:max(16px, env(safe-area-inset-left, 0px)); padding-right:max(16px, env(safe-area-inset-right, 0px))}
+a{color:var(--accent); text-underline-offset:3px}
+a:focus-visible, button:focus-visible{outline:3px solid var(--accent); outline-offset:3px; border-radius:4px}
+h1,h2,h3{font-family:var(--font-display); margin:0; line-height:1.05; text-wrap:balance}
+h2{font-size:clamp(1.8rem, 3.6vw, 2.4rem); font-weight:800; font-stretch:112%; letter-spacing:-0.01em}
+h3{font-size:1.2rem; font-weight:700; font-stretch:105%}
+p{margin:0}
+
+.top{display:flex; justify-content:space-between; align-items:center; gap:16px; flex-wrap:wrap; padding-block:20px; border-bottom:1px solid var(--line)}
+.top .me{font-family:var(--font-display); font-weight:800; font-stretch:115%; letter-spacing:.01em}
+.top nav{display:flex; gap:20px; flex-wrap:wrap; font-size:.95rem}
+.top nav a{color:var(--ink-soft); text-decoration:none}
+.top nav a:hover{color:var(--accent)}
+
+/* hero */
+.hero{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1.1fr); gap:56px; align-items:center; padding-block:56px 64px}
+.hero h1{font-size:min(4.2rem, 13.5cqi); font-weight:900; font-stretch:110%; letter-spacing:-0.02em; line-height:.95}
+.hero > div:first-child{min-width:0; container-type:inline-size}
+.role{margin-top:18px; font-family:var(--font-display); font-size:1.35rem; font-weight:600; font-stretch:108%; color:var(--accent)}
+.lede{margin-top:16px; max-width:34em; color:var(--ink)}
+.cta{display:flex; gap:12px; flex-wrap:wrap; margin-top:28px}
+.btn{display:inline-flex; align-items:center; padding:11px 18px; border-radius:6px; font:600 .95rem var(--font-body); text-decoration:none; border:1.5px solid var(--accent); cursor:pointer}
+.btn.primary{background:var(--accent); color:var(--accent-ink)}
+.btn.ghost{background:transparent; color:var(--accent)}
+
+/* the data demo */
+.sheet{background:var(--surface); border:1px solid var(--line); border-radius:10px; overflow:hidden; min-width:0}
+.sheet-bar{display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap; padding:12px 16px; border-bottom:1px solid var(--line)}
+.sheet-bar .name{font:500 .85rem var(--font-data); color:var(--ink-soft)}
+.state{font:600 .78rem var(--font-body); padding:3px 10px; border-radius:999px; background:var(--bad-tint); color:var(--bad)}
+.state.ok{background:var(--tint); color:var(--accent)}
+.table-scroll{overflow-x:auto}
+table{border-collapse:collapse; width:100%; font:400 .82rem var(--font-data); font-variant-numeric:tabular-nums}
+th,td{padding:8px 14px; text-align:left; border-bottom:1px solid var(--line); white-space:nowrap}
+th{font-weight:500; color:var(--ink-soft); background:var(--bg)}
+td.num, th.num{text-align:right}
+td.err{background:var(--bad-tint); color:var(--bad)}
+td.fixed{background:var(--tint); color:var(--accent)}
+tr.gone td{text-decoration:line-through; color:var(--ink-soft); opacity:.55}
+.sheet-foot{display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap; padding:14px 16px}
+.log{margin:0; padding:0; list-style:none; font-size:.85rem; color:var(--ink-soft); display:grid; gap:2px}
+.log li::before{content:"✓ "; color:var(--accent); font-weight:600}
+.hint{font-size:.85rem; color:var(--ink-soft)}
+.sample-note{font-size:.78rem; color:var(--ink-soft); padding:0 16px 12px}
+
+/* sections */
+section{padding-block:60px; border-top:1px solid var(--line)}
+.sec-head{display:flex; justify-content:space-between; align-items:end; gap:24px; flex-wrap:wrap; margin-bottom:32px}
+.sec-head p{color:var(--ink-soft); max-width:34em}
+
+/* skills */
+.skills{display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:32px}
+.skills h3{padding-bottom:10px; border-bottom:2px solid var(--accent); margin-bottom:14px}
+.skills ul{list-style:none; margin:0; padding:0; display:grid; gap:8px}
+.skills li{display:flex; justify-content:space-between; gap:12px}
+.skills li span:last-child{color:var(--ink-soft); font-size:.9rem; text-align:right}
+
+/* case studies */
+.cases{display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:24px}
+.case{background:var(--surface); border:1px solid var(--line); border-radius:10px; padding:28px; display:grid; gap:14px; align-content:start}
+.case .who{font-size:.9rem; color:var(--ink-soft)}
+.badge{justify-self:start; font:600 .78rem var(--font-body); padding:3px 10px; border-radius:4px; background:var(--tint); color:var(--accent)}
+.steps{list-style:none; margin:0; padding:0; display:grid; gap:10px; counter-reset:s}
+.steps li{display:grid; grid-template-columns:28px minmax(0,1fr); gap:10px; counter-increment:s}
+.steps li::before{content:counter(s); font:500 .8rem var(--font-data); color:var(--accent); border:1.5px solid var(--accent); border-radius:50%; width:24px; height:24px; display:grid; place-items:center}
+.uses{display:flex; flex-wrap:wrap; gap:8px; font:400 .78rem var(--font-data); color:var(--ink-soft)}
+.uses span{border-bottom:1px solid var(--line)}
+.more{margin-top:24px; color:var(--ink-soft); font-size:.95rem; max-width:52em}
+
+/* experience */
+.rows{list-style:none; margin:0; padding:0}
+.rows > li{display:grid; grid-template-columns:190px minmax(0,1fr); gap:28px; padding-block:24px; border-bottom:1px solid var(--line)}
+.rows > li:first-child{padding-top:0}
+.rows > li:last-child{border-bottom:none}
+.when{font:500 .85rem var(--font-data); color:var(--ink-soft); padding-top:3px; font-variant-numeric:tabular-nums}
+.org{color:var(--ink-soft); margin-top:2px}
+.rows ul{margin:10px 0 0; padding-left:18px; display:grid; gap:4px; max-width:44em}
+
+/* contact */
+.contact{display:grid; grid-template-columns:minmax(0,1.1fr) minmax(0,1fr); gap:40px; align-items:start}
+.contact h2{font-size:clamp(2rem, 5vw, 3.2rem); font-weight:900; font-stretch:118%}
+.contact p{margin-top:16px; color:var(--ink-soft); max-width:30em}
+.channels{display:grid; gap:12px}
+.channel{display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap; padding:16px 18px; background:var(--surface); border:1px solid var(--line); border-radius:8px; min-width:0}
+.channel .label{font-size:.85rem; color:var(--ink-soft)}
+.channel .value{font:500 .95rem var(--font-data); overflow-wrap:anywhere; user-select:all}
+.copy{font:600 .85rem var(--font-body); padding:7px 12px; border-radius:6px; border:1.5px solid var(--accent); background:transparent; color:var(--accent); cursor:pointer}
+footer{padding-block:28px 44px; border-top:1px solid var(--line); color:var(--ink-soft); font-size:.85rem}
+
+
+/* charts */
+.chart{position:relative; min-width:0}
+.chart svg{width:100%; height:auto; display:block; overflow:visible}
+.chart .grid{stroke:var(--line); stroke-width:1}
+.chart .axis{font:400 11px var(--font-data); fill:var(--ink-soft)}
+.chart .lbl{font:500 12px var(--font-body); fill:var(--ink)}
+.chart .val{font:500 11px var(--font-data); fill:var(--ink)}
+.chart .muted{font:400 11px var(--font-body); fill:var(--ink-soft)}
+.chart .bar{fill:var(--s1)}
+.chart .bar.miss{fill:none; stroke:var(--bad); stroke-width:1.5; stroke-dasharray:4 3}
+.chart .ln1{fill:none; stroke:var(--s1); stroke-width:2.5; stroke-linejoin:round; stroke-linecap:round}
+.chart .ln2{fill:none; stroke:var(--s2); stroke-width:2.5; stroke-linejoin:round; stroke-linecap:round; stroke-dasharray:6 4}
+.chart .band{fill:var(--band)}
+.chart .cross{stroke:var(--ink-soft); stroke-width:1}
+.chart .pt1{fill:var(--s1); stroke:var(--surface); stroke-width:2}
+.chart .pt2{fill:var(--s2); stroke:var(--surface); stroke-width:2}
+.chart .hit{fill:transparent; cursor:crosshair}
+.tip{position:absolute; pointer-events:none; background:var(--ink); color:var(--bg); font:500 .78rem var(--font-body); padding:6px 9px; border-radius:6px; white-space:nowrap; transform:translate(-50%, calc(-100% - 10px)); z-index:2}
+.tip b{font-family:var(--font-data); font-weight:500}
+.legend{display:flex; gap:16px; flex-wrap:wrap; font-size:.82rem; color:var(--ink-soft)}
+.legend span{display:inline-flex; align-items:center; gap:6px}
+.legend i{display:inline-block; width:18px; height:0; border-top:2.5px solid var(--s1)}
+.legend i.c2{border-top:2.5px dashed var(--s2)}
+.fig-cap{font-size:.78rem; color:var(--ink-soft)}
+.figure{display:grid; gap:10px; padding:16px; background:var(--bg); border-radius:8px}
+.figure h4{margin:0; font:600 .9rem var(--font-body)}
+.sheet .chart-block{padding:12px 16px 4px; border-top:1px solid var(--line); display:grid; gap:6px}
+.sheet .chart-block h4{margin:0; font:600 .85rem var(--font-body)}
+.sheet .chart-block .why{font-size:.82rem; color:var(--ink-soft)}
+details.data{font-size:.8rem; color:var(--ink-soft)}
+details.data summary{cursor:pointer}
+details.data table{margin-top:6px; font-size:.75rem}
+
+
+/* case player */
+.player{display:grid; grid-template-columns:minmax(0,0.9fr) minmax(0,1.1fr); gap:32px; background:var(--surface); border:1px solid var(--line); border-radius:12px; padding:28px}
+.player-side{display:grid; gap:14px; align-content:start; min-width:0}
+.case-tabs{display:inline-flex; gap:4px; padding:4px; background:var(--bg); border-radius:8px; justify-self:start}
+.case-tab{font:600 .9rem var(--font-body); padding:8px 16px; border:0; border-radius:6px; background:transparent; color:var(--ink-soft); cursor:pointer}
+.case-tab[aria-selected="true"]{background:var(--surface); color:var(--ink); box-shadow:0 1px 2px rgba(0,0,0,.12)}
+.player h3{font-size:1.5rem}
+.stages{list-style:none; margin:4px 0 0; padding:0; display:grid; gap:4px; counter-reset:st}
+.stages li{counter-increment:st}
+.stages button{width:100%; display:grid; grid-template-columns:30px minmax(0,1fr); gap:12px; text-align:left; padding:10px 12px; border:0; border-radius:8px; background:transparent; color:var(--ink); font:inherit; cursor:pointer}
+.stages button::before{content:counter(st); width:26px; height:26px; border-radius:50%; display:grid; place-items:center; font:500 .8rem var(--font-data); border:1.5px solid var(--line); color:var(--ink-soft)}
+.stages button:hover{background:var(--bg)}
+.stages .on button{background:var(--tint)}
+.stages .on button::before{background:var(--accent); border-color:var(--accent); color:var(--accent-ink)}
+.stages .done button::before{border-color:var(--accent); color:var(--accent)}
+.stages b{display:block; font-weight:600}
+.stages small{display:block; color:var(--ink-soft); font-size:.88rem; line-height:1.45; margin-top:2px}
+.player-controls{display:flex; gap:14px; align-items:center; flex-wrap:wrap; margin-top:6px}
+.stage-panel{display:grid; gap:12px; align-content:start; min-width:0; background:var(--bg); border-radius:10px; padding:16px}
+.progress{height:4px; border-radius:2px; background:var(--line); overflow:hidden}
+.progress span{display:block; height:100%; width:0; background:var(--accent)}
+#stage-svg{width:100%; height:auto; display:block}
+#stage-svg .dot{transition:transform .9s cubic-bezier(.6,.05,.25,1), fill .5s, opacity .5s; transform-box:view-box}
+#stage-svg .lab{font:600 12px var(--font-body); fill:var(--ink); transition:opacity .5s}
+#stage-svg .sub{font:400 11px var(--font-data); fill:var(--ink-soft); transition:opacity .5s}
+#stage-svg .axis{font:400 11px var(--font-data); fill:var(--ink-soft)}
+#stage-svg .grid{stroke:var(--line); stroke-width:1}
+#stage-svg .band{fill:var(--band)}
+#stage-svg .ln1{fill:none; stroke:var(--s1); stroke-width:2.5; stroke-linejoin:round; stroke-linecap:round}
+#stage-svg .ln2{fill:none; stroke:var(--s2); stroke-width:2.5; stroke-linejoin:round; stroke-linecap:round; stroke-dasharray:6 4}
+#stage-svg .tile{fill:var(--surface); stroke:var(--line)}
+#stage-svg .big{font:800 26px var(--font-display); fill:var(--ink); font-variant-numeric:tabular-nums}
+#stage-svg .fade{transition:opacity .6s}
+.insight{margin:0; font-weight:600; min-height:1.6em}
+.insight span{color:var(--accent)}
+@media (max-width:860px){ .player{grid-template-columns:minmax(0,1fr); padding:18px} .stage-panel{order:-1} }
+
+@media (max-width:860px){
+  .hero, .contact{grid-template-columns:minmax(0,1fr)}
+  .cases{grid-template-columns:minmax(0,1fr)}
+  .skills{grid-template-columns:minmax(0,1fr); gap:28px}
+  .rows > li{grid-template-columns:minmax(0,1fr); gap:4px}
+}
+@media (prefers-reduced-motion: no-preference){
+  td, tr{transition:background-color .4s, color .4s, opacity .4s}
+}
+</style>
+
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <span class="me">Prabhkirat Singh</span>
+    <nav aria-label="Sections">
+      <a href="#skills">Skills</a>
+      <a href="#work">Work</a>
+      <a href="#experience">Experience</a>
+      <a href="#contact">Contact</a>
+      <a href="Prabhkirat_Singh_CV.pdf" target="_blank" rel="noopener">Resume</a>
+    </nav>
+  </header>
+
+  <div class="hero">
+    <div>
+      <h1>Prabhkirat Singh</h1>
+      <p class="role">Junior Data Analyst · MSc Computer Science</p>
+      <p class="lede">I clean, check and analyse data so the people using it can trust the numbers. I work in Python, SQL and Excel, and I'm studying for an MSc in Computer Science at the University of Huddersfield.</p>
+      <div class="cta">
+        <a class="btn primary" href="#work">See my work</a>
+        <a class="btn ghost" href="Prabhkirat_Singh_CV.pdf" target="_blank" rel="noopener">Resume</a>
+        <a class="btn ghost" href="https://www.linkedin.com/in/prabhkiratsingh08" target="_blank" rel="noopener">LinkedIn</a>
+      </div>
+    </div>
+
+    <div class="sheet" aria-label="Data cleaning demonstration">
+      <div class="sheet-bar">
+        <span class="name">store_sales.csv</span>
+        <span class="state" id="state">5 issues found</span>
+      </div>
+      <div class="table-scroll">
+        <table id="demo">
+          <thead><tr><th>Order</th><th>Date</th><th>Store</th><th class="num">Qty</th><th class="num">Total £</th></tr></thead>
+          <tbody>
+            <tr><td>1041</td><td>2026-09-03</td><td>Leeds</td><td class="num">2</td><td class="num">18.40</td></tr>
+            <tr><td>1042</td><td data-fix="2026-09-04" class="err">04/09/26</td><td data-fix="Huddersfield" class="err">hudds </td><td class="num">1</td><td class="num">9.20</td></tr>
+            <tr data-dup><td>1042</td><td>04/09/26</td><td>hudds </td><td class="num">1</td><td class="num">9.20</td></tr>
+            <tr><td>1043</td><td>2026-09-05</td><td data-fix="Leeds" class="err">LEEDS</td><td class="num">3</td><td class="num">27.60</td></tr>
+            <tr><td>1044</td><td>2026-09-05</td><td>Bradford</td><td class="num">1</td><td class="num err" data-fix="9.20">—</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="chart-block">
+        <h4>Sales by store (£)</h4>
+        <div class="chart" id="store-chart" role="img" aria-label="Bar chart of sales by store, before and after cleaning"></div>
+        <p class="why" id="store-why">Before cleaning, Leeds is split in two, Huddersfield is double-counted and Bradford's sale is missing.</p>
+      </div>
+      <div class="sheet-foot">
+        <ul class="log" id="log" hidden>
+          <li>Removed 1 duplicate order</li>
+          <li>Standardised store names and date format</li>
+          <li>Filled 1 missing total from qty × unit price</li>
+        </ul>
+        <span class="hint" id="hint">Typical raw data: duplicates, mixed formats, gaps.</span>
+        <button class="btn primary" id="clean" type="button">Clean the data</button>
+      </div>
+      <p class="sample-note">Example data, made up to show the process.</p>
+    </div>
+  </div>
+
+  <section id="skills" aria-labelledby="skills-h">
+    <div class="sec-head">
+      <h2 id="skills-h">What I work with</h2>
+      <p>Grouped by the stage of an analysis they help with.</p>
+    </div>
+    <div class="skills">
+      <div>
+        <h3>Get and shape data</h3>
+        <ul>
+          <li><span>SQL</span><span>querying, joins</span></li>
+          <li><span>Python</span><span>scripting, analysis</span></li>
+          <li><span>Excel</span><span>organising, checks</span></li>
+        </ul>
+      </div>
+      <div>
+        <h3>Clean and check</h3>
+        <ul>
+          <li><span>Data cleaning</span><span>duplicates, formats</span></li>
+          <li><span>Data quality</span><span>gaps, errors</span></li>
+          <li><span>Data organisation</span><span>structure for reporting</span></li>
+        </ul>
+      </div>
+      <div>
+        <h3>Explain the result</h3>
+        <ul>
+          <li><span>Data visualisation</span><span>charts, dashboards</span></li>
+          <li><span>Reporting</span><span>summaries for decisions</span></li>
+          <li><span>HTML and CSS</span><span>web front-end</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="work" aria-labelledby="work-h">
+    <div class="sec-head">
+      <h2 id="work-h">Analytics work</h2>
+      <p>Watch how I worked through two job simulations, from raw data to a recommendation.</p>
+    </div>
+    <div class="player" id="player">
+      <div class="player-side">
+        <div class="case-tabs" role="tablist" aria-label="Choose a job simulation">
+          <button class="case-tab" role="tab" id="tab-q" aria-selected="true" data-case="q">Quantium</button>
+          <button class="case-tab" role="tab" id="tab-d" aria-selected="false" data-case="d">Deloitte</button>
+        </div>
+        <h3 id="case-title">Retail customer analytics</h3>
+        <p class="who" id="case-who">Quantium data analytics job simulation · Forage</p>
+        <ol class="stages" id="stages"></ol>
+        <div class="player-controls">
+          <button class="btn primary" id="play" type="button">Replay analysis</button>
+          <span class="hint" id="play-hint">Or pick a step to jump to it.</span>
+        </div>
+      </div>
+      <div class="stage-panel">
+        <div class="progress" aria-hidden="true"><span id="progress-bar"></span></div>
+        <svg id="stage-svg" viewBox="0 0 480 320" role="img" aria-labelledby="stage-desc"><desc id="stage-desc"></desc></svg>
+        <p class="insight" id="insight" aria-live="polite"></p>
+        <p class="fig-cap">Animated walkthrough with example data, showing the steps of the analysis rather than the actual results.</p>
+      </div>
+    </div>
+    <p class="more">Also completed: HPE Software Engineering, Accenture UK Developer Programme, Commonwealth Bank Cybersecurity Fundamentals and Lloyds Banking Group UX Design Advanced.</p>
+  </section>
+
+  <section id="experience" aria-labelledby="exp-h">
+    <div class="sec-head">
+      <h2 id="exp-h">Experience and education</h2>
+    </div>
+    <ol class="rows">
+      <li>
+        <span class="when">Jan 2026 – Aug 2026</span>
+        <div>
+          <h3>Data Analyst (Volunteer)</h3>
+          <p class="org">Nipun Technologies</p>
+          <ul>
+            <li>Cleaned, organised and structured business data in spreadsheets so it was accurate and ready for reporting.</li>
+            <li>Reviewed numerical datasets for errors, gaps and inconsistencies before analysis.</li>
+            <li>Prepared data summaries to support reporting and day-to-day decisions.</li>
+          </ul>
+        </div>
+      </li>
+      <li>
+        <span class="when">Jun 2025 – Jul 2026</span>
+        <div>
+          <h3>Front-End Developer Intern</h3>
+          <p class="org">CODTECH IT Solutions</p>
+          <ul>
+            <li>Built and updated user-facing web pages in HTML and CSS to agreed requirements.</li>
+            <li>Diagnosed and fixed front-end issues within a professional development team.</li>
+          </ul>
+        </div>
+      </li>
+      <li>
+        <span class="when">Current</span>
+        <div>
+          <h3>MSc Computer Science</h3>
+          <p class="org">University of Huddersfield</p>
+        </div>
+      </li>
+      <li>
+        <span class="when">GPA 7.6</span>
+        <div>
+          <h3>Bachelor of Computer Applications (BCA)</h3>
+          <p class="org">Guru Gobind Singh Indraprastha University (GGSIPU)</p>
+        </div>
+      </li>
+    </ol>
+  </section>
+
+  <section id="contact" aria-labelledby="contact-h">
+    <div class="contact">
+      <div>
+        <h2 id="contact-h">Looking for a data analyst?</h2>
+        <p>I'm open to junior, graduate and part-time Data Analyst roles in West Yorkshire and remote. Email or LinkedIn is the best way to reach me.</p>
+      </div>
+      <div class="channels">
+        <div class="channel">
+          <div><div class="label">Resume</div><div class="value">Skills, experience and education at a glance</div></div>
+          <a class="copy" href="Prabhkirat_Singh_CV.pdf" target="_blank" rel="noopener" style="text-decoration:none">Resume</a>
+        </div>
+        <div class="channel">
+          <div><div class="label">Email</div><div class="value" id="email">prabhkirat0809@gmail.com</div></div>
+          <button class="copy" id="copy-email" type="button">Copy</button>
+        </div>
+        <div class="channel">
+          <div><div class="label">LinkedIn</div><a class="value" href="https://www.linkedin.com/in/prabhkiratsingh08" target="_blank" rel="noopener">in/prabhkiratsingh08</a></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>Prabhkirat Singh · West Yorkshire, UK · 2026</footer>
+</div>
+
+<script>
+(function(){
+  var NS='http://www.w3.org/2000/svg';
+  function el(tag, attrs, parent, text){ var e=document.createElementNS(NS,tag); for(var k in attrs) e.setAttribute(k, attrs[k]); if(text!=null) e.textContent=text; if(parent) parent.appendChild(e); return e; }
+  function tipFor(box){ var t=document.createElement('div'); t.className='tip'; t.hidden=true; box.appendChild(t); return t; }
+  function showTip(t, box, svg, x, y, html){
+    var r=svg.getBoundingClientRect(), vb=svg.viewBox.baseVal, sx=r.width/vb.width, sy=r.height/vb.height;
+    t.innerHTML=html; t.hidden=false; t.style.left=(x*sx)+'px'; t.style.top=(y*sy)+'px';
+  }
+
+  // horizontal bars (null = missing value)
+  window.drawBars = function(box, rows, opts){
+    box.innerHTML=''; opts=opts||{};
+    var W=420, rowH=30, L=104, R=56, H=rows.length*rowH+4;
+    var max=opts.max || Math.max.apply(null, rows.map(function(r){return r.value||0;}));
+    var svg=el('svg',{viewBox:'0 0 '+W+' '+H}, box), t=tipFor(box);
+    var scale=function(v){ return (W-L-R)*v/max; };
+    rows.forEach(function(r,i){
+      var y=i*rowH+4;
+      el('text',{x:L-10,y:y+15,'text-anchor':'end','class':'lbl'},svg,r.label);
+      if(r.value==null){
+        el('rect',{x:L,y:y+3,width:(W-L-R)*0.35,height:16,rx:4,'class':'bar miss'},svg);
+        el('text',{x:L+(W-L-R)*0.35+8,y:y+15,'class':'muted'},svg,'missing');
+      } else {
+        var w=Math.max(2,scale(r.value));
+        var b=el('rect',{x:L,y:y+3,width:w,height:16,rx:4,'class':'bar'},svg);
+        el('text',{x:L+w+6,y:y+15,'class':'val'},svg,(opts.fmt||String)(r.value));
+        var hit=el('rect',{x:0,y:y,width:W,height:rowH,'class':'hit'},svg);
+        hit.addEventListener('pointermove',function(){ showTip(t,box,svg,L+w/2,y+3,r.label+': <b>'+(opts.fmt||String)(r.value)+'</b>'); });
+        hit.addEventListener('pointerleave',function(){ t.hidden=true; });
+      }
+    });
+  };
+
+})();
+
+(function(){
+  var btn = document.getElementById('clean');
+  var state = document.getElementById('state');
+  var log = document.getElementById('log');
+  var hint = document.getElementById('hint');
+  var table = document.getElementById('demo');
+  var cells = Array.prototype.map.call(table.querySelectorAll('td[data-fix]'), function(td){ return {td:td, raw:td.textContent}; });
+  var dup = table.querySelector('tr[data-dup]');
+  cells.forEach(function(c){ c.td.classList.add('err'); });
+  var storeBox = document.getElementById('store-chart');
+  var storeWhy = document.getElementById('store-why');
+  var gbp = function(v){ return '£'+v.toFixed(2); };
+  function drawStores(){
+    if(clean){
+      drawBars(storeBox,[{label:'Leeds',value:46.00},{label:'Huddersfield',value:9.20},{label:'Bradford',value:9.20}],{max:46,fmt:gbp});
+      storeWhy.textContent = 'After cleaning, every sale is counted once under the right store.';
+    } else {
+      drawBars(storeBox,[{label:'Leeds',value:18.40},{label:'LEEDS',value:27.60},{label:'hudds',value:18.40},{label:'Bradford',value:null}],{max:46,fmt:gbp});
+      storeWhy.textContent = 'Before cleaning, Leeds is split in two, Huddersfield is double-counted and Bradford\'s sale is missing.';
+    }
+  }
+  var clean = false;
+  drawStores();
+  btn.addEventListener('click', function(){
+    clean = !clean;
+    cells.forEach(function(c){
+      c.td.textContent = clean ? c.td.dataset.fix : c.raw;
+      c.td.classList.toggle('err', !clean);
+      c.td.classList.toggle('fixed', clean);
+    });
+    dup.classList.toggle('gone', clean);
+    state.textContent = clean ? 'Ready for analysis' : '5 issues found';
+    state.classList.toggle('ok', clean);
+    log.hidden = !clean; hint.hidden = clean;
+    btn.textContent = clean ? 'Show raw data' : 'Clean the data';
+    drawStores();
+  });
+  document.getElementById('copy-email').addEventListener('click', function(e){
+    var b = e.currentTarget, text = document.getElementById('email').textContent;
+    function selectIt(){ var r = document.createRange(); r.selectNodeContents(document.getElementById('email')); var s = window.getSelection(); s.removeAllRanges(); s.addRange(r); b.textContent = 'Selected'; }
+    try{
+      navigator.clipboard.writeText(text).then(function(){ b.textContent = 'Copied'; }, selectIt);
+    }catch(err){ selectIt(); }
+  });
+})();
+</script>
+<script>
+(function(){
+  var NS='http://www.w3.org/2000/svg';
+  var svg=document.getElementById('stage-svg'), desc=document.getElementById('stage-desc');
+  var stagesEl=document.getElementById('stages'), insight=document.getElementById('insight');
+  var bar=document.getElementById('progress-bar'), playBtn=document.getElementById('play');
+  var reduce=window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function el(tag,a,parent,text){var e=document.createElementNS(NS,tag);for(var k in a)e.setAttribute(k,a[k]);if(text!=null)e.textContent=text;(parent||svg).appendChild(e);return e;}
+  function css(v){return getComputedStyle(document.documentElement).getPropertyValue(v).trim();}
+  function sunflower(n,cx,cy,sp){var out=[];for(var i=0;i<n;i++){var r=sp*Math.sqrt(i+0.5),t=i*2.39996;out.push([cx+r*Math.cos(t),cy+r*Math.sin(t)]);}return out;}
+
+  // ---------- example data ----------
+  var trial=[408,410,415,407,420,418,452,461,470,465,474,468];
+  var control=[412,405,418,410,422,415,419,412,425,418,421,416];
+  var avg=function(a){return a.reduce(function(x,y){return x+y;},0)/a.length;};
+  var uplift=Math.round((avg(trial.slice(6))/avg(control.slice(6))-1)*100);
+  var cats=[{n:'Standard',v:412},{n:'Follow up',v:168},{n:'Escalate',v:47},{n:'Unclassified',v:23}];
+  var total=cats.reduce(function(s,c){return s+c.v;},0), action=cats[1].v+cats[2].v;
+
+  var CASES={
+    q:{title:'Retail customer analytics', who:'Quantium data analytics job simulation · Forage', n:60, bad:[3,11,19,26,38,44,57],
+       steps:[
+        {t:'Prepare the data',d:'Check every transaction and remove rows with errors, outliers or missing values.'},
+        {t:'Find the customer segments',d:'Group shoppers by life stage and spend to see who drives sales.'},
+        {t:'Evaluate the store trial',d:'Compare trial stores with matched control stores, week by week.'}]},
+    d:{title:'Business data analysis and dashboard', who:'Deloitte data analytics job simulation · Forage', n:65, bad:[],
+       steps:[
+        {t:'Explore the raw records',d:'Load the client’s records and understand what each field means.'},
+        {t:'Classify in Excel',d:'Sort every record into a category the client can act on.'},
+        {t:'Present on a dashboard',d:'Turn the result into headline figures and a chart for decision-makers.'}]}
+  };
+  var segs=[{n:'Mainstream young singles/couples',k:24},{n:'Budget older families',k:17},{n:'Mainstream retirees',k:12}];
+
+  var cur='q', step=2, dots=[], timer=null, layer=null;
+
+  function setDot(d,x,y,s,fill,op){
+    d.style.transform='translate('+x.toFixed(1)+'px,'+y.toFixed(1)+'px) scale('+s+')';
+    if(fill) d.style.fill=fill; d.style.opacity=op==null?1:op;
+  }
+  function build(){
+    svg.querySelectorAll('.dot,.layer').forEach(function(n){n.remove();});
+    dots=[]; var c=CASES[cur];
+    for(var i=0;i<c.n;i++){ var d=el('circle',{cx:0,cy:0,r:5.5,'class':'dot'}); dots.push(d); }
+    layer=el('g',{'class':'layer'});
+    stagesEl.innerHTML='';
+    c.steps.forEach(function(st,i){
+      var li=document.createElement('li'), b=document.createElement('button');
+      b.type='button'; b.innerHTML='<span><b></b><small></small></span>';
+      b.querySelector('b').textContent=st.t; b.querySelector('small').textContent=st.d;
+      b.addEventListener('click',function(){ stop(); show(i); });
+      li.appendChild(b); stagesEl.appendChild(li);
+    });
+    document.getElementById('case-title').textContent=c.title;
+    document.getElementById('case-who').textContent=c.who;
+  }
+
+  function grid(i,cols,x0,y0,gap){return [x0+(i%cols)*gap, y0+Math.floor(i/cols)*gap];}
+
+  function show(k){
+    step=k; var c=CASES[cur], s1=css('--s1'), bad=css('--bad'), soft=css('--ink-soft');
+    Array.prototype.forEach.call(stagesEl.children,function(li,i){li.className=i===k?'on':(i<k?'done':'');});
+    bar.style.width=((k+1)/3*100)+'%';
+    layer.innerHTML='';
+    if(cur==='q'){
+      if(k===0){
+        dots.forEach(function(d,i){var p=grid(i,12,90,90,27); var isBad=c.bad.indexOf(i)>-1; setDot(d,p[0],p[1],1,isBad?bad:soft);});
+        el('text',{x:90,y:60,'class':'lab'},layer,'60 sample transactions');
+        setTimeout(function(){ if(step!==0||cur!=='q')return; dots.forEach(function(d,i){var p=grid(i,12,90,90,27); if(c.bad.indexOf(i)>-1) setDot(d,p[0],p[1],0,bad,0); else setDot(d,p[0],p[1],1,s1);}); },900);
+        insight.innerHTML='<span>7 of 60</span> rows had errors and were removed before analysis.';
+        desc.textContent='A grid of 60 transactions; 7 rows with errors are removed.';
+      } else if(k===1){
+        var good=dots.filter(function(d,i){return c.bad.indexOf(i)<0;}), idx=0;
+        var centres=[[110,170],[250,170],[380,170]];
+        segs.forEach(function(sg,si){
+          var pts=sunflower(sg.k,centres[si][0],centres[si][1],8.2);
+          for(var j=0;j<sg.k;j++){ var p=pts[j]; setDot(good[idx++],p[0],p[1],1,s1); }
+          var words=sg.n.split(' '), line1=words[0], line2=words.slice(1).join(' ');
+          el('text',{x:centres[si][0],y:262,'text-anchor':'middle','class':'lab'},layer,line1);
+          el('text',{x:centres[si][0],y:278,'text-anchor':'middle','class':'lab'},layer,line2);
+          el('text',{x:centres[si][0],y:296,'text-anchor':'middle','class':'sub'},layer,Math.round(sg.k/53*100)+'% of sales');
+        });
+        c.bad.forEach(function(i){ setDot(dots[i],240,160,0,bad,0); });
+        insight.innerHTML='<span>Mainstream young singles and couples</span> drive the largest share of sales.';
+        desc.textContent='Customers grouped into three segments; mainstream young singles and couples is the largest at 45 percent.';
+      } else {
+        dots.forEach(function(d){ setDot(d,240,160,0.2,s1,0); });
+        drawTrial();
+        insight.innerHTML='During the trial, the trial store sold <span>'+uplift+'% more</span> than its control store.';
+        desc.textContent='Line chart of weekly sales: trial and control track together for six weeks, then the trial store rises '+uplift+' percent above control.';
+      }
+    } else {
+      if(k===0){
+        dots.forEach(function(d,i){ var a=(i*97)%360*Math.PI/180, r=30+((i*53)%110); setDot(d,240+r*Math.cos(a)*1.5,160+r*Math.sin(a)*0.9,1,soft); });
+        el('text',{x:240,y:24,'text-anchor':'middle','class':'lab'},layer,total+' records, each dot = 10');
+        insight.innerHTML='<span>'+total+' raw records</span>, no structure yet.';
+        desc.textContent=total+' unsorted records shown as scattered dots.';
+      } else if(k===1){
+        var idx=0, colW=110, x0=50;
+        cats.forEach(function(ct,ci){
+          var n=Math.round(ct.v/10);
+          for(var j=0;j<n && idx<dots.length;j++){ var x=x0+ci*colW+(j%5)*14, y=250-Math.floor(j/5)*14; setDot(dots[idx++],x,y,1,s1); }
+          el('text',{x:x0+ci*colW+28,y:280,'text-anchor':'middle','class':'lab'},layer,ct.n);
+          el('text',{x:x0+ci*colW+28,y:296,'text-anchor':'middle','class':'sub'},layer,String(ct.v));
+        });
+        while(idx<dots.length) setDot(dots[idx++],240,250,0,s1,0);
+        insight.innerHTML='Every record sorted into <span>4 categories</span>.';
+        desc.textContent='Records sorted into four columns: Standard 412, Follow up 168, Escalate 47, Unclassified 23.';
+      } else {
+        dots.forEach(function(d){ setDot(d,240,200,0.2,s1,0); });
+        drawDash();
+        insight.innerHTML='<span>'+Math.round(action/total*100)+'% of records</span> need follow-up or escalation.';
+        desc.textContent='Dashboard: '+total+' records in total, '+action+' need action, with a bar chart by category.';
+      }
+    }
+  }
+
+  function drawPath(d,cls,delay){
+    var p=el('path',{d:d,'class':cls},layer);
+    if(!reduce){ var L=p.getTotalLength(); p.style.strokeDasharray=cls==='ln2'?'6 4':L; if(cls!=='ln2'){p.style.strokeDashoffset=L; p.style.transition='stroke-dashoffset 1.4s ease '+delay+'s'; requestAnimationFrame(function(){requestAnimationFrame(function(){p.style.strokeDashoffset=0;});});} else {p.style.opacity=0; p.style.transition='opacity .8s ease '+delay+'s'; requestAnimationFrame(function(){requestAnimationFrame(function(){p.style.opacity=1;});});} }
+    return p;
+  }
+  function drawTrial(){
+    var W=480,H=320,L=48,R=70,T=30,B=40,y0=380,y1=490;
+    var X=function(w){return L+(W-L-R)*(w-1)/11;}, Y=function(v){return T+(H-T-B)*(1-(v-y0)/(y1-y0));};
+    el('rect',{x:X(6.5),y:T,width:X(12)-X(6.5),height:H-T-B,'class':'band'},layer);
+    el('text',{x:X(6.5)+6,y:T+16,'class':'sub'},layer,'Trial period');
+    [400,425,450,475].forEach(function(v){ el('line',{x1:L,x2:W-R,y1:Y(v),y2:Y(v),'class':'grid'},layer); el('text',{x:L-6,y:Y(v)+4,'text-anchor':'end','class':'axis'},layer,'£'+v); });
+    [1,4,7,10,12].forEach(function(w){ el('text',{x:X(w),y:H-14,'text-anchor':'middle','class':'axis'},layer,'Wk '+w); });
+    var d=function(a){return a.map(function(v,i){return (i?'L':'M')+X(i+1).toFixed(1)+' '+Y(v).toFixed(1);}).join(' ');};
+    drawPath(d(control),'ln2',0.1); drawPath(d(trial),'ln1',0.3);
+    var l1=el('text',{x:X(12)+8,y:Y(trial[11])+4,'class':'lab fade'},layer,'Trial'), l2=el('text',{x:X(12)+8,y:Y(control[11])+4,'class':'lab fade'},layer,'Control');
+    if(!reduce){ [l1,l2].forEach(function(n){n.style.opacity=0;}); setTimeout(function(){[l1,l2].forEach(function(n){n.style.opacity=1;});},1500); }
+  }
+  function countUp(node,to,suffix){
+    if(reduce){node.textContent=to+(suffix||'');return;}
+    var t0=null; function f(ts){ if(!t0)t0=ts; var p=Math.min(1,(ts-t0)/900); node.textContent=Math.round(to*(1-Math.pow(1-p,3)))+(suffix||''); if(p<1)requestAnimationFrame(f);} requestAnimationFrame(f);
+  }
+  function drawDash(){
+    var tiles=[{l:'Total records',v:total,s:''},{l:'Need action',v:action,s:''},{l:'Share of total',v:Math.round(action/total*100),s:'%'}];
+    tiles.forEach(function(tl,i){
+      var x=16+i*152; el('rect',{x:x,y:16,width:140,height:76,rx:8,'class':'tile'},layer);
+      el('text',{x:x+14,y:40,'class':'sub'},layer,tl.l); countUp(el('text',{x:x+14,y:76,'class':'big'},layer,'0'),tl.v,tl.s);
+    });
+    var L=110,R=60,W=480,top=124,rowH=44,max=cats[0].v;
+    cats.forEach(function(ct,i){
+      var y=top+i*rowH, w=(W-L-R)*ct.v/max;
+      el('text',{x:L-10,y:y+18,'text-anchor':'end','class':'lab'},layer,ct.n);
+      var r=el('rect',{x:L,y:y+6,height:18,rx:4,width:reduce?w:2,style:'fill:var(--s1)'},layer);
+      var v=el('text',{x:L+w+8,y:y+19,'class':'sub fade'},layer,String(ct.v));
+      if(!reduce){ r.style.transition='width .9s cubic-bezier(.3,.7,.3,1) '+(0.15*i)+'s'; v.style.opacity=0; requestAnimationFrame(function(){requestAnimationFrame(function(){r.setAttribute('width',w); r.style.width=w+'px'; setTimeout(function(){v.style.opacity=1;},900+150*i);});}); }
+    });
+  }
+
+  function stop(){ clearTimeout(timer); timer=null; playBtn.textContent='Replay analysis'; }
+  function play(){
+    stop(); show(0); playBtn.textContent='Playing…';
+    var k=0; (function next(){ timer=setTimeout(function(){ k++; if(k<3){show(k); next();} else stop(); }, 2800); })();
+  }
+  playBtn.addEventListener('click',play);
+  document.querySelectorAll('.case-tab').forEach(function(t){
+    t.addEventListener('click',function(){
+      if(cur===t.dataset.case) return;
+      document.querySelectorAll('.case-tab').forEach(function(x){x.setAttribute('aria-selected',String(x===t));});
+      cur=t.dataset.case; stop(); build(); if(reduce) show(2); else play();
+    });
+  });
+
+  build(); show(2);  // resting state: the finished analysis is visible
+  if(!reduce && 'IntersectionObserver' in window){
+    var seen=false, io=new IntersectionObserver(function(es){ es.forEach(function(e){ if(e.isIntersecting && !seen){ seen=true; play(); io.disconnect(); } }); },{threshold:0.25});
+    io.observe(document.getElementById('player'));
+  }
+})();
+</script>
+
+
+</body>
+</html>
